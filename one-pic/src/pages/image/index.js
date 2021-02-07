@@ -1,9 +1,6 @@
 import React from 'react';
-import { Tooltip, Input, message, Tabs } from 'antd';
+import { Tooltip, Input, message, BackTop } from 'antd';
 import {
-  PlusOutlined,
-  DeleteOutlined,
-  DeleteTwoTone,
   CopyTwoTone,
 } from "@ant-design/icons";
 
@@ -22,7 +19,6 @@ import { getImages } from '../../store/api'
 import './index.scss'
 
 const { Search } = Input;
-const { TabPane } = Tabs;
 
 class ImageManage extends React.Component{
   constructor(props) {
@@ -259,6 +255,8 @@ class ImageManage extends React.Component{
             cancelModal={() => this.setState({ previewVisible: false })}
           />
         )}
+
+        <BackTop />
       </div>
     )
   }
