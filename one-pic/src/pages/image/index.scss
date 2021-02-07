@@ -1,0 +1,216 @@
+$imageWidth: 162px;
+
+.image-container{
+  background-color: #fff;
+  padding: 30px 26px 16px;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  height: 100%;
+  .search-wrap{
+    margin: 0 10px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ant-input-search{
+      max-width: 630px;
+    }
+  }
+  .ant-pagination{
+    margin: 16px 0;
+  }
+  .loading-images{
+    text-align: center;
+    color: #ccc;
+    font-size: 13px;
+    i{
+      font-size: 12px;
+      margin: 0 12px;
+    }
+  }
+  .tab-search{
+    position: relative;
+    margin: 8px 10px;
+    .ant-input-search{
+      position: absolute;
+      top: 4px;
+      right: 0;
+      width: 220px;
+      border-radius: 16px;
+      border-color: #f0f0f0;
+      padding-left: 16px;
+    }
+    .ant-tabs-tab{
+      font-size: 15px;
+    }
+  }
+  .image-search-upload{
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 10px 8px 10px;
+    
+  }
+  .batch-btn-line{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #F6F8F9;
+    border-radius: 4px;
+    margin: 9px 10px 16px 10px;
+    padding: 16px 20px;
+    .cancel-check{
+      margin-left: 10px;
+    }
+    .anticon-delete{
+      cursor: pointer;
+    }
+  }
+  
+}
+
+.images-list-wrap{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  position: relative;
+  min-height: 250px;
+  .no-data{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    padding-top: 60px;
+    justify-content: center;
+    color: #ccc;
+  }
+  .image-item-place{
+    width: 182px;
+  }
+  .image-item{
+    margin: 0 10px 30px 10px;
+    text-align: center;
+    width: $imageWidth;
+    &:hover, &.active{
+      .image-wrap{
+        background-color: #EAFFEA;
+      }
+    }
+    &:hover{
+      .image-wrap .btn-line .btn-line-right,
+      .image-wrap .btn-line .btn-line-left{
+        opacity: 1;
+      }
+    }
+    &.active{
+      .image-wrap .btn-line .btn-line-left{
+        opacity: 1;
+      }
+    }
+    .image-wrap{
+      width: 100%;
+      height: $imageWidth;
+      line-height: $imageWidth;
+      cursor: pointer;
+      position: relative;
+      .main-image{
+        max-width: 100%;
+        max-height: $imageWidth;
+        text-align: center;
+        line-height: $imageWidth;
+      }
+      .btn-line{
+        position: absolute;
+        height: 28px;
+        line-height: 28px;
+        width: 100%;
+        top: 16px;
+        padding: 10px;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
+        display: flex;
+        .btn-line-left{
+          opacity: 0;
+        }
+        .btn-line-right{
+          align-items: center;
+          display: flex;
+          opacity: 0;
+        }
+        .anticon-delete, .anticon-copy{
+          background-color: #f0f0f0;
+          border: 1px solid #E4E8EB;
+          padding: 3px;
+          border-radius: 50%;
+          margin-left: 16px;
+        }
+        .ant-checkbox-inner{
+          transform: scale(1.2);
+        }
+      }
+    }
+    .image-title{
+      padding: 4px;
+      display: inline-block;
+      margin-top: 20px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 100%;
+      white-space: nowrap;
+    }
+  }
+}
+
+// 图片搜索框
+.image-search{
+  .ant-input-suffix{
+    margin-left: 0;
+  }
+  .anticon-search::before{
+    display: none;
+  }
+  .anticon-search{
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 450px){
+  $imageWidth: 136px !important;
+  .image-container{
+    padding: 24px 8px 8px;
+  }
+  .image-item{
+    width: $imageWidth;
+    .image-wrap{
+      height: $imageWidth;
+      line-height: $imageWidth;
+      .main-image{
+        max-height: $imageWidth;
+        line-height: $imageWidth;
+      }
+    }
+  }
+  .image-container .tab-search .ant-input-search{
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 360px){
+  $imageWidth: 200px !important;
+  .images-list-wrap{
+    justify-content: center;
+  }
+  .image-item{
+    width: $imageWidth;
+    .image-wrap{
+      height: $imageWidth;
+      line-height: $imageWidth;
+      .main-image{
+        max-height: $imageWidth;
+        line-height: $imageWidth;
+      }
+    }
+  }
+}

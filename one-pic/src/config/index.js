@@ -1,0 +1,1 @@
+export const QINIU_HOST_NAME = 'http://img.uwayfly.com/';
