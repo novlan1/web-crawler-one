@@ -23,6 +23,9 @@ const { Search } = Input;
 class ImageManage extends React.Component{
   constructor(props) {
     super(props)
+
+    this.imageListWrap = React.createRef();
+
     this.state = {
       imageList: [],
       imageTotal: -1,
@@ -36,6 +39,7 @@ class ImageManage extends React.Component{
       extraLoadTimes: 0,
 
       marinSearchSize: 'default', // 搜索框尺寸
+      searchMaxWidth: 630, // 搜索框最大宽度
 
     }
   }
@@ -43,12 +47,24 @@ class ImageManage extends React.Component{
   componentDidMount() {
     this.onGetImages();
     this.onJudgeScreenWidth();
-    window.addEventListener("scroll", this.onBindScroll);
     this.onJudgeMobile();
+    this.onSetSearchMaxWidth();
+    window.addEventListener("scroll", this.onBindScroll);
   }
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.onBindScroll);
+  }
+
+  onSetSearchMaxWidth = () => {
+    if (this.imageListWrap 
+        && this.imageListWrap.current 
+        && this.imageListWrap.current.offsetWidth
+      ) {
+      this.setState({
+        searchMaxWidth: Math.min(630, this.imageListWrap.current.offsetWidth)
+      })
+    }
   }
 
   onJudgeMobile = () => {
@@ -104,7 +120,6 @@ class ImageManage extends React.Component{
       imageTotal = data.count || 0;
       const dataList = data.data || [];
       
-
       dataList.map(item => {
         item.pureQiniuKey = item.qiniu_key.replace('.jpg', '');
         item.realUrl = QINIU_HOST_NAME + item.qiniu_key;
@@ -112,9 +127,12 @@ class ImageManage extends React.Component{
 
         if (!item.stamp && item.qiniu_key) {
           item.stamp = getOnePicCreatedStamp(item.pureQiniuKey);
-          item.formatedDate = timeStampFormat(item.stamp, 'yyyy-MM-dd')
+        } else {
+          item.stamp = item.stamp * 1000;
         }
+        item.formatedDate = timeStampFormat(item.stamp, 'yyyy-MM-dd')
       })
+
       if (isNewLoad) {
         imageList = dataList;
       } else {
@@ -179,15 +197,30 @@ class ImageManage extends React.Component{
   }
 
   render() {
-    const { imageList, isMobile, loading, imageTotal, marinSearchSize, previewVisible, preViewIndex } = this.state;
+    const { 
+      imageList, 
+      isMobile, 
+      loading, 
+      imageTotal, 
+      marinSearchSize, 
+      previewVisible, 
+      preViewIndex, 
+      searchMaxWidth 
+    } = this.state;
 
     return (
       <div className="image-container">
         <div className="search-wrap">
-          <Search placeholder="input search text" enterButton="搜索" onSearch={this.onSearch} size={marinSearchSize} />
+          <Search 
+            placeholder="input search text" 
+            enterButton 
+            onSearch={this.onSearch} 
+            size={marinSearchSize} 
+            style={{maxWidth: searchMaxWidth}}
+          />
         </div>
 
-        <div className="images-list-wrap">
+        <div className="images-list-wrap" ref={this.imageListWrap}>
           {imageList.map((item, index) => (
             <div
               key={item.id}

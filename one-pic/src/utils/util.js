@@ -31,6 +31,7 @@ export function getScrollHeight() {
  * @returns {Number} stamp
  */
 export function getOnePicCreatedStamp(qiniuKey) {
+  console.log('qiniuKey', qiniuKey)
   if (!qiniuKey) {
     return;
   }

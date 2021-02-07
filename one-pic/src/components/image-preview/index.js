@@ -52,6 +52,12 @@ class ImagePreview extends React.Component{
   }
 
   onBindTouchMove = (e) => {
+    if (e.target && e.target.classList) {
+      if (e.target.classList.contains('description')) {
+        return
+      }
+    }
+    
     var touch = e.changedTouches;  
     endx = touch[0].clientX;  
     endy = touch[0].clientY; 
@@ -98,6 +104,10 @@ class ImagePreview extends React.Component{
     e.stopPropagation();
     e.preventDefault();
     this.props.cancelModal();
+  }
+
+  onClickImg = (e) => {
+    console.log(e)
   }
 
   onDownLoadImg = (imgsrc) => {
@@ -160,13 +170,14 @@ class ImagePreview extends React.Component{
           }
         </div>
         <div className='img-wrap'>
-          <img alt="" src={preViewSrc} />
+          <img alt="" src={preViewSrc} onClick={this.onClickImg} />
           <div className='description'>
             {imageList[preViewIndex] && imageList[preViewIndex].showDesc}
           </div>
           <CloseOutlined 
             onClick={this.onCancelModal} 
             onTouchEnd={this.onCancelModal}
+            style={{userSelect: 'none'}}
           />
         </div>
         <div className='half-preview half-right' onClick={this.onToNext}>
