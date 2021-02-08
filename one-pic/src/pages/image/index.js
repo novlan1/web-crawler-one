@@ -131,7 +131,7 @@ class ImageManage extends React.Component{
 
     getImages({
       pageNo,
-      pageSize: 20,
+      pageSize: 8,
       search: searchVal,
     }).then(res => {
       const data = res.data || {};
@@ -162,7 +162,7 @@ class ImageManage extends React.Component{
         imageTotal,
         extraLoadTimes: extraLoadTimes + 1
       }, () => {
-        if (imageTotal > imageList.length && extraLoadTimes < 2) {
+        if (imageTotal > imageList.length && extraLoadTimes < 4) {
           this.onGetMoreData();
         }
       })
