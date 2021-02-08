@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tooltip, Input, message, BackTop } from 'antd';
+import LazyLoad from 'react-lazyload';
 import {
   CopyTwoTone,
 } from "@ant-design/icons";
@@ -24,7 +25,8 @@ class ImageManage extends React.Component{
   constructor(props) {
     super(props)
 
-    this.imageListWrap = React.createRef();
+    this.imageListWrapRef = React.createRef();
+    this.fakeImageItemRef = React.createRef();
 
     this.state = {
       imageList: [],
@@ -41,6 +43,8 @@ class ImageManage extends React.Component{
       marinSearchSize: 'default', // 搜索框尺寸
       searchMaxWidth: 630, // 搜索框最大宽度
 
+      imgWidth: 300,
+
     }
   }
 
@@ -50,19 +54,33 @@ class ImageManage extends React.Component{
     this.onJudgeMobile();
     this.onSetSearchMaxWidth();
     window.addEventListener("scroll", this.onBindScroll);
+    this.onGetSmallPic();
   }
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.onBindScroll);
   }
 
+  onGetSmallPic = () => {
+    if (this.imageListWrapRef && this.imageListWrapRef.current) {
+      const imgs = this.imageListWrapRef.current.querySelectorAll('img');
+      if (imgs && imgs[0]) {
+        this.setState({
+          imgWidth: imgs[0].parentNode.offsetWidth * 2
+        }, () => {
+          this.fakeImageItemRef.current.style = 'display: none;';
+        })
+      }
+    }
+  }
+
   onSetSearchMaxWidth = () => {
-    if (this.imageListWrap 
-        && this.imageListWrap.current 
-        && this.imageListWrap.current.offsetWidth
+    if (this.imageListWrapRef 
+        && this.imageListWrapRef.current 
+        && this.imageListWrapRef.current.offsetWidth
       ) {
       this.setState({
-        searchMaxWidth: Math.min(630, this.imageListWrap.current.offsetWidth)
+        searchMaxWidth: Math.min(630, this.imageListWrapRef.current.offsetWidth)
       })
     }
   }
@@ -196,6 +214,11 @@ class ImageManage extends React.Component{
     })
   }
 
+  getImgSrc = (item) => {
+    const { imgWidth } = this.state;
+    return `${item.realUrl}?imageView2/2/w/${imgWidth}`
+  }
+
   render() {
     const { 
       imageList, 
@@ -220,7 +243,20 @@ class ImageManage extends React.Component{
           />
         </div>
 
-        <div className="images-list-wrap" ref={this.imageListWrap}>
+        <div className="images-list-wrap" ref={this.imageListWrapRef}>
+          <div
+            className='image-item' 
+            ref={this.fakeImageItemRef}
+            style={{ visibility: 'hidden'}}
+          >
+              <div className="image-wrap">
+                <img
+                  src="http://img.uwayfly.com/3046.jpg"
+                  alt=""
+                  className="main-image"
+                />
+              </div>
+          </div>
           {imageList.map((item, index) => (
             <div
               key={item.id}
@@ -229,11 +265,13 @@ class ImageManage extends React.Component{
             >
               <div className="image-wrap">
                 <Tooltip title={isMobile ? "" : item.showDesc} placement="bottom">
-                  <img
-                    src={item.realUrl}
-                    alt=""
-                    className="main-image"
-                  />
+                  <LazyLoad height={200}>
+                    <img
+                      src={this.getImgSrc(item)}
+                      alt=""
+                      className="main-image"
+                    />
+                  </LazyLoad>
                 </Tooltip>
                 {!isMobile && <div className="btn-line">
                   <span className="btn-line-left">
