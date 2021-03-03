@@ -3,10 +3,13 @@ import { Modal } from "antd";
 import {
   RightOutlined,
   LeftOutlined,
-  CloseOutlined
+  CloseOutlined,
 } from "@ant-design/icons";
 
 import { QINIU_HOST_NAME } from '../../config'
+import {
+  getSmallImgSrc
+} from '../../utils/util';
 import "./index.scss";
 
 
@@ -23,8 +26,11 @@ let endx = 0
 class ImagePreview extends React.Component{
   constructor(props) {
     super(props)
+    this.imgRef = React.createRef();
+
     this.state = {
-      preViewIndex: props.preViewIndex || 0
+      preViewIndex: props.preViewIndex || 0,
+      imgWidth: 0,
     }
   }
 
@@ -134,10 +140,34 @@ class ImagePreview extends React.Component{
     image.src = imgsrc;
   }
 
+  onGetSmallImgSrc = (url) => {
+    const { imgWidth } = this.state;
+    console.log('imgWidth: ', imgWidth)
+
+    if (!imgWidth) {
+      this.onComputeImgWidth();
+      return url;
+    }
+    return getSmallImgSrc(url, imgWidth)
+  }
+
+  onComputeImgWidth = () => {
+    if (this.imgRef.current) {
+      const { current } = this.imgRef;
+
+      this.imgRef.current.onload = () => {
+          console.log('onload offsetWidth', current.offsetWidth)
+          this.setState({
+            imgWidth: current.offsetWidth * 2
+
+          })
+      }
+    }
+  }
+
   render() {
     const { imageList } = this.props
     const { preViewIndex, showBtnLine } = this.state
-
     const preViewSrc = imageList[preViewIndex].realUrl
 
     return (
@@ -170,7 +200,7 @@ class ImagePreview extends React.Component{
           }
         </div>
         <div className='img-wrap'>
-          <img alt="" src={preViewSrc} onClick={this.onClickImg} />
+            <img alt="" src={this.onGetSmallImgSrc(preViewSrc)} onClick={this.onClickImg} ref={this.imgRef} />
           <div className='description'>
             {imageList[preViewIndex] && imageList[preViewIndex].showDesc}
           </div>

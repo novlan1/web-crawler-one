@@ -31,7 +31,7 @@ export function getScrollHeight() {
  * @returns {Number} stamp
  */
 export function getOnePicCreatedStamp(qiniuKey) {
-  console.log('qiniuKey', qiniuKey)
+  // console.log('qiniuKey', qiniuKey)
   if (!qiniuKey) {
     return;
   }
@@ -98,3 +98,9 @@ export function isPC() {
   }
   return flag;
 }
+
+// 获取小图链接
+export const getSmallImgSrc = (originUrl, imgWidth) => {
+    return `${originUrl}?imageView2/2/w/${imgWidth}`
+}
+

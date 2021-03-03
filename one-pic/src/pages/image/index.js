@@ -13,7 +13,8 @@ import {
   getOnePicCreatedStamp,
   timeStampFormat,
   copyLink,
-  isPC
+  isPC,
+  getSmallImgSrc
 } from '../../utils/util'
 import { QINIU_HOST_NAME } from '../../config';
 import { getImages } from '../../store/api'
@@ -216,7 +217,7 @@ class ImageManage extends React.Component{
 
   getImgSrc = (item) => {
     const { imgWidth } = this.state;
-    return `${item.realUrl}?imageView2/2/w/${imgWidth}`
+    return getSmallImgSrc(item.realUrl, imgWidth)
   }
 
   render() {
